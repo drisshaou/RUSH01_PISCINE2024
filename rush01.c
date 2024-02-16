@@ -34,7 +34,9 @@ int	main(int ac, char **av) {
 			col = 0;
 			while (col < 4) {
 				tab[row][col] = '1';
+				printf("row : %d, col: %d\n", row, col);
 				col++;
+				
 			}
 			tab[row][col] = '\0';
 			row++;
