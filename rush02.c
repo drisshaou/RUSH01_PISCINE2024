@@ -10,16 +10,21 @@ void    print_error()
 
 void	free_tab(int **tab, int size) {
 	while (--size >= 0)
-		free(tab[size]);
+		if (tab[size] != NULL)
+			free(tab[size]);
 	free(tab);
 }
 
 void	free_sides(int *clup, int *cldown, int *rwleft, int *rwright)
 {
-	free(clup);
-	free(cldown);
-	free(rwleft);
-	free(rwright);
+	if (clup != NULL)
+		free(clup);
+	if (cldown != NULL)
+		free(cldown);
+	if (rwleft != NULL)
+		free(rwleft);
+	if (rwright != NULL)
+		free(rwright);
 }
 
 int	is_arg_valid(char *str) {
@@ -95,6 +100,48 @@ void	fill_with_four(int **tab, int *side1, int *side2, int flip)
         }
 
 }
+
+void	fill_with_other_four(int **tab, int *side1, int *side3, int flip)
+{
+	int	col;
+	int	row;
+
+	row = 0;
+	while (row < 4)
+	{
+		col = 0;
+		while (col) {
+			if (side1[row] == 2 && side3[col] == 3)
+			{
+				if (flip)
+					tab[col][row] = 4;
+				else
+					tab[row][col] = 4;
+			}
+			col++;
+		}
+		row++;
+	}
+	row = 0;
+	while (row < 4)
+	{
+		col = 0;
+		while (col) {
+			if (side1[row] == 2 && side3[col] == 3)
+			{
+				if (flip)
+					tab[col][row] = 4;
+				else
+					tab[row][col] = 4;
+			}
+			col++;
+		}
+		row++;
+	}
+}
+
+
+
 
 int	is_parse_valid(int *side1, int *side2)
 {
@@ -202,8 +249,7 @@ void	fill_tab(int **tab, int *side1, int *side2, int flip)
 				else
 					tab[row][col] = row + 1;
 			}
-		}
-			
+		}		
 		col++;
 	}
         while (col >= 0)
@@ -219,7 +265,6 @@ void	fill_tab(int **tab, int *side1, int *side2, int flip)
                                         tab[row][col] = 4 - row;
 			}
                 }
-
                 col--;
         }
 }
@@ -276,6 +321,11 @@ int	main(int ac, char **av) {
 		fill_with_four(tab, colup, coldown, 0);
 		fill_with_four(tab, rowleft, rowright, 1);
 
+		
+		fill_with_other_four(tab, rowleft, colup, 0);
+		fill_with_other_four(tab, coldown, rowleft, 1);
+		
+		
 		show_tab(tab);
 		free_tab(tab, 4);	
 		free_sides(colup, coldown, rowleft, rowright);
